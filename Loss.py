@@ -3,10 +3,10 @@ import torch.nn.functional as F
 
 
 class NT_XentLoss(torch.nn.Module):
-    def __init__(self, batch_size, temperature=0.5, device='cuda' if torch.cuda.is_available() else 'cpu'):
+    def __init__(self, hparams, device='cuda' if torch.cuda.is_available() else 'cpu'):
         super(NT_XentLoss, self).__init__()
-        self.batch_size = batch_size
-        self.temperature = temperature
+        self.batch_size = hparams.batch_size
+        self.temperature = hparams.temperature
         self.device = device
         self.softmax = torch.nn.Softmax(dim=-1)
 

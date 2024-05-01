@@ -63,3 +63,5 @@ yarl==1.9.4
 yaspin==3.0.2
 zipp==3.18.1
 numpy
+yaml~=0.2.5
+pyyaml~=6.0.1

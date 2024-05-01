@@ -1,0 +1,41 @@
+# models
+model: densenet121
+embedding_dim: 128
+projection_dim: 128
+batch_size: 4
+
+# Tabular_MLP
+input_dim:
+hidden_dim1:
+hidden_dim2:
+
+# loss
+temperature: 0.1
+
+# train_data path
+image_path: ''
+table_path: ''
+
+# train
+resume_training : False
+num_epochs: 100
+lr: 0.001
+sava_path: 'simclr.pth'
+load_path: 'simclr.pth'
+
+# test
+test_batch_size: 16
+test_image_path: ''
+test_table_path: ''
+
+# classifier
+Classifier:
+  epochs:
+  image_feature_dime: 128
+  table_feature_dim:
+  hid_dim1: 100
+  hid_dim2: 64
+  T_stage_num_classes:
+  N_stage_num_classes:
+  M_stage_num_classes:
+

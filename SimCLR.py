@@ -10,8 +10,9 @@ from Loss import NT_XentLoss
 
 
 class SimCLR:
-    def __init__(self, hparams):
+    def __init__(self, hparams, device='cuda' if torch.cuda.is_available() else 'cpu'):
         self.hparams = hparams
+        self.device = device
         self.initialize_imaging_encoder_and_projector()
         # 假设还有表格数据的初始化函数
         self.initialize_table_encoder_and_projector()
@@ -39,10 +40,10 @@ class SimCLR:
 
     def train_step(self, data_loader):
         running_loss = 0.0
-        data_loader_iter = iter(data_loader)
         for img_batch, table_batch in data_loader:
+            img_batch.cuda()
+            table_batch.cuda()
             img_proj, table_proj = self.forward(img_batch, table_batch)
-
             loss = self.criterion(img_proj, table_proj)
             self.optimizer.zero_grad()
             loss.backward()

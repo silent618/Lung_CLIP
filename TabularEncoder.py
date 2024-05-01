@@ -4,20 +4,20 @@ import torch.nn as nn
 
 # 定义一个简单的两层MLP模型
 class MLP(nn.Module):
-    def __init__(self, hparams):
+    def __init__(self, hparams, device='cuda' if torch.cuda.is_available() else 'cpu'):
         super(MLP, self).__init__()
+        self.device = device
         input_dim = hparams.input_dim  # 后续需要调整
-        hidden_dim = hparams.hidden_dim
-        output_dim = hparams.output_dim
-        # 输入层到隐藏层的线性变换
-        self.layer1 = nn.Linear(input_dim, hidden_dim)
-        # 隐藏层到输出层的线性变换
-        self.layer2 = nn.Linear(hidden_dim, output_dim)
-        # 激活函数
-        self.relu = nn.ReLU()
+        hidden_dim1 = hparams.hidden_dim1
+        hidden_dim2 = hparams.hidden_dim2
+        output_dim = hparams.embedding_dim
+        self.fc = nn.Sequential(nn.Linear(input_dim, hidden_dim1),
+                                nn.ReLU(),
+                                nn.Linear(hidden_dim1, hidden_dim2),
+                                nn.ReLU(),
+                                nn.Linear(hidden_dim2, output_dim),
+                                nn.ReLU())
 
     def forward(self, x):
-        # 前向传播
-        x = self.relu(self.layer1(x))  # 隐藏层的线性变换加上ReLU激活
-        x = self.layer2(x)  # 输出层的线性变换
-        return x
+        output = self.fc(x)
+        return output
