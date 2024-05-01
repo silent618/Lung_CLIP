@@ -1,6 +1,6 @@
 # models
 model: densenet121
-embedding_dim: 128
+embedding_dim: 1024
 projection_dim: 128
 batch_size: 4
 
@@ -31,7 +31,7 @@ test_table_path: ''
 # classifier
 Classifier:
   epochs:
-  image_feature_dime: 128
+  image_feature_dime: 1024
   table_feature_dim:
   hid_dim1: 100
   hid_dim2: 64
