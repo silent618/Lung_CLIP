@@ -1,5 +1,4 @@
 import torch
-import torch.nn.functional as F
 
 
 class NT_XentLoss(torch.nn.Module):

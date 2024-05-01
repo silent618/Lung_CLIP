@@ -1,11 +1,7 @@
 import torch
-from torch import nn
-from torch.utils.data import DataLoader
-from torchvision import transforms
 from timm.models import create_model
 from lightly.models.modules import SimCLRProjectionHead
 from TabularEncoder import MLP
-from dataset import ImageTableDataset
 from Loss import NT_XentLoss
 
 
