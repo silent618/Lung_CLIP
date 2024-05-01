@@ -66,7 +66,7 @@ if __name__ == "__main__":
     optimizer = torch.optim.SGD(downstream_model.parameters(), lr=0.001, momentum=0.9)
     criterion = nn.CrossEntropyLoss()  # 分类任务的标准损失函数
 
-    for epoch in range(10):
+    for epoch in range(hparams.Classifier.epochs):
         for img_data, table_data in data_loader:
             img_features = framework.encoder_imaging(img_data)
             table_features = table_data[:-3]
@@ -85,8 +85,14 @@ if __name__ == "__main__":
             optimizer.step()
 
     # 评估
-    test_dataset = ImageTableDataset(hparams.test_image_path, hparams.test_table_path, transform=transform)
-    test_dataloader = DataLoader(dataset, batch_size=hparams.test_batch_size, shuffle=False)
+    test_transform = transforms.Compose([
+        transforms.Resize(256),
+        transforms.CenterCrop(224),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ])
+    test_dataset = ImageTableDataset(hparams.test_image_path, hparams.test_table_path, transform=test_transform)
+    test_dataloader = DataLoader(test_dataset, batch_size=hparams.test_batch_size, shuffle=False)
     t_stage_correct = 0
     n_stage_correct = 0
     m_stage_correct = 0
@@ -94,6 +100,8 @@ if __name__ == "__main__":
     total = 0
     with torch.no_grad():
         for img_data, table_data in test_dataloader:
+            img_data.cuda()
+            table_data.cuda()
             img_features = framework.encoder_imaging(img_data)
             table_features = table_data[:-3]
             t_stage_labels = table_data[-3]
@@ -104,12 +112,12 @@ if __name__ == "__main__":
             _, n_predicted = torch.max(n_stage.data, 1)
             _, m_predicted = torch.max(m_stage.data, 1)
             total += t_stage_labels.size(0)
-            t_stage_correct += (t_predicted == t_stage_labels).sum().item()
-            n_stage_correct += (n_predicted == n_stage_labels).sum().item()
-            m_stage_correct += (m_predicted == m_stage_labels).sum().item()
+            t_stage_correct += (t_predicted == t_stage_labels).sum().item().cpu()
+            n_stage_correct += (n_predicted == n_stage_labels).sum().item().cpu()
+            m_stage_correct += (m_predicted == m_stage_labels).sum().item().cpu()
             all_stage_correct += (t_predicted == t_stage_labels
                                   and n_predicted == n_stage_labels
-                                  and m_predicted == m_stage_labels).sum().item()
+                                  and m_predicted == m_stage_labels).sum().item().cpu()
 
     t_stage_accuracy = 100 * t_stage_correct / total
     n_stage_accuracy = 100 * n_stage_correct / total

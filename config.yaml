@@ -38,4 +38,5 @@ Classifier:
   T_stage_num_classes:
   N_stage_num_classes:
   M_stage_num_classes:
-
+  save_path: 'classifier.pth'
+  load_path: 'classifier.pth'
