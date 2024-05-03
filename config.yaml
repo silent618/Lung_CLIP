@@ -38,5 +38,6 @@ Classifier:
   T_stage_num_classes:
   N_stage_num_classes:
   M_stage_num_classes:
+  cancer_type:
   save_path: 'classifier.pth'
   load_path: 'classifier.pth'

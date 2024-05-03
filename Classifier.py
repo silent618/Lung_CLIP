@@ -17,6 +17,7 @@ class DownstreamClassifier(nn.Module):
         self.task_T_stage = nn.Linear(2*classifier_hparams.hid_dim2, classifier_hparams.T_stage_num_classes)
         self.task_N_stage = nn.Linear(2 * classifier_hparams.hid_dim2, classifier_hparams.N_stage_num_classes)
         self.task_M_stage = nn.Linear(2 * classifier_hparams.hid_dim2, classifier_hparams.M_stage_num_classes)
+        self.task_cancer_type = nn.Linear(2 * classifier_hparams.hid_dim2, classifier_hparams.cancer_type_num_classes)
         self.softmax = torch.nn.Softmax()
 
     def forward(self, img_features, table_features):
@@ -27,4 +28,5 @@ class DownstreamClassifier(nn.Module):
         t_stage = self.softmax(self.task_T_stage(combined_feature))
         n_stage = self.softmax(self.task_N_stage(combined_feature))
         m_stage = self.softmax(self.task_M_stage(combined_feature))
-        return t_stage, n_stage, m_stage
+        cancer_type = self.softmax(self.task_cancer_type(combined_feature))
+        return t_stage, n_stage, m_stage, cancer_type
