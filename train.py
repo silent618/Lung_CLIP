@@ -32,7 +32,9 @@ if __name__ == "__main__":
     data_loader = DataLoader(dataset, batch_size=hparams.batch_size, shuffle=True)
 
     # 设置优化器等
-    framework.optimizer = torch.optim.Adam(list(framework.encoder_imaging.parameters())
+    framework.optimizer = torch.optim.Adam(list(framework.encoder_imaging1.parameters())
+                                           + list(framework.encoder_imaging2.parameters())
+                                           + list(framework.cross_attention.parameters())
                                            + list(framework.projector_imaging.parameters())
                                            + list(framework.encoder_tabular.parameters())
                                            + list(framework.projector_tabular.parameters()), hparams.lr)
